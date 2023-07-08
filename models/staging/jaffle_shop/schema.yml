@@ -27,6 +27,7 @@ sources:
                 count: 24
                 period: hour
               filter: datediff('day' , _etl_loaded_at , current_timestamp) < 2 #perf
+              
                
 
       - name: orders
@@ -56,6 +57,7 @@ sources:
                 count: 24
                 period: hour
 
+      - name: employees
 
 models:
   - name: stg_jaffle_shop__customers
@@ -84,4 +86,10 @@ models:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
               config:
                 severity: warn
+
+  - name: employee_flat
+    description: This table has basic information about employees flattened out.
+    config:
+      alias: tbl_employees_flattened
+      materialized: table
 

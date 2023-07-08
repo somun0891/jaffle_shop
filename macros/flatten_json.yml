@@ -1,0 +1,12 @@
+version: 2
+
+macros:
+  - name: flatten_json
+    description: flattens out any json object
+    arguments:
+      - name: model_src
+        type: string
+      - name: json_field
+        type: string
+      - name: array_field
+        type: string
