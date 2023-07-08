@@ -1,14 +1,23 @@
+{#
+    
+{{ config(
+  enabled=false
+) }}
+
+#}
+
+
 {% set payment_methods = ['credit_card', 'coupon', 'bank_transfer', 'gift_card'] %}
 
 with orders as (
 
-    select * from {{ ref('stg_orders') }}
+    select * from {{ ref('stg_jaffle_shop__orders') }}
 
 ),
 
 payments as (
 
-    select * from {{ ref('stg_payments') }}
+    select * from {{ ref("stg_payments") }}
 
 ),
 

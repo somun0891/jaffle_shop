@@ -3,3 +3,12 @@ target/
 dbt_modules/
 logs/
 **/.DS_Store
+**/.vscode
+**/.dbtenv
+*.bkp
+*jaffle_shop.code-workspace
+*dbt_Structure_template.txt
+*profiles.yml
+*test*
+
+

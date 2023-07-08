@@ -1,0 +1,87 @@
+version: 2
+
+
+sources:
+  - name: jaffle_shop
+    database: PC_DBT_DB
+    description: A replica of the postgres database used to power the jaffle_shop app.   
+    schema: jaffle_shop
+    tables:
+      - name: customers
+        columns:
+          - name: id
+            description: Primary key of the table
+            tests:
+              - unique
+              - not_null
+          - name: first_name
+            description: Customer first_name
+          - name: last_name
+            description: Customer last_name 
+        loaded_at_field: etl_loaded_at      
+        freshness:
+              warn_after:
+                count: 12
+                period: hour
+              error_after:
+                count: 24
+                period: hour
+              filter: datediff('day' , _etl_loaded_at , current_timestamp) < 2 #perf
+               
+
+      - name: orders
+        columns:
+          - name: id
+            description: Primary key of the table
+            tests:
+              - unique
+              - not_null
+
+          - name: user_id
+            description: Foreign key to customers
+
+          - name: order_date
+            description: date on which order is placed
+
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+        loaded_at_field: etl_loaded_at      
+        freshness:
+              warn_after:
+                count: 12
+                period: hour
+              error_after:
+                count: 24
+                period: hour
+
+
+models:
+  - name: stg_jaffle_shop__customers
+    config:
+      tags: ['pii']
+      #materialized: view     
+      alias: customers_stg
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_jaffle_shop__orders
+    config:
+      #materialized: view
+      alias: orders_stg     
+    columns:
+      - name: order_id
+        tests:
+           - unique
+           - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+              config:
+                severity: warn
+

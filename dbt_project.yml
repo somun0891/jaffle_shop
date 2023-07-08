@@ -19,8 +19,20 @@ clean-targets:
 
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
+query-comment : 
+        comment: "run by <% if  {{ target.user }} in dbt"
+        append: True
+
+quoting:
+  database: false
+  identifier: false
+  schema: false
+
+
 models:
   jaffle_shop:
+    staging:
+    marts:
       materialized: table
-      staging:
-        materialized: view
+      core:
+

@@ -1,25 +1,18 @@
 version: 2
 
+sources:
+  - name: jaffle_shop
+    database: PC_DBT_DB
+    description: A replica of the postgres database used to power the jaffle_shop app.   
+    schema: jaffle_shop
+    tables:
+      - name: payments
+
 models:
-  - name: stg_customers
-    columns:
-      - name: customer_id
-        tests:
-          - unique
-          - not_null
-
-  - name: stg_orders
-    columns:
-      - name: order_id
-        tests:
-          - unique
-          - not_null
-      - name: status
-        tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
   - name: stg_payments
+    config:
+      materialized: table
+      alias: payment_stg
     columns:
       - name: payment_id
         tests:
